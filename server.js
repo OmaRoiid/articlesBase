@@ -21,6 +21,8 @@ db.on('error',(err)=>{
 app.set('views',path.join(__dirname,'views'))
 // https://www.npmjs.com/package/pug
 app.set('view engine', 'pug')
+app.use(express.static('public'))
+
 
 //setup bodyParser 
 app.use(bodyParser.urlencoded({ extended: false }))

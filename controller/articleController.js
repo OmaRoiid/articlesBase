@@ -38,6 +38,44 @@ module.exports={
                 article:article
               });
           });
+    },
+    editArticleData(req,res){
+        Articles.findById(req.params.id, function(err, article){
+              res.render('article_edit', {
+                  message:'Edit Article',
+                article:article
+              });
+          });
+    },
+    submitUpdatedArticleToDB(req,res){
+        let updatedArticle= {}
+        let query={_id:req.params.id}
+        updatedArticle.title=req.body.title;
+        updatedArticle.author=req.body.author;
+        updatedArticle.body=req.body.body
+
+        Articles.updateOne(query, updatedArticle,function(err){
+            if(err) {
+                console.log(err)
+                return;
+            }
+            else{
+                res.redirect('/')
+            }
+        })
+    },
+    deleteArticleFromDB(req,res){
+        let query={_id:req.params.id}
+       Articles.remove(query,function(err){
+        if(err) {
+            console.log(err)
+            return;
+        }
+        else{
+            res.send("Done ")
+        }
+       })
+
     }
 
 }
