@@ -1,5 +1,4 @@
 
-$(document).ready(function() {
     $('.delete-article').on("click",function(){
     const articleID=$(this).attr('data-id')
     $.ajax({
@@ -14,4 +13,4 @@ $(document).ready(function() {
         }
       });
       })  
-    });
+  

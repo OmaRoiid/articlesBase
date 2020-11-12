@@ -17,20 +17,35 @@ module.exports={
         .catch(next)
     },
     addArticle(req,res){
-        let addedArticle= new Articles()
-        addedArticle.title=req.body.title;
-        addedArticle.author=req.body.author;
-        addedArticle.body=req.body.body
-        addedArticle.save((err)=>{
-            if(err) {
-                console.log(err)
-                return;
-            }
-            else{
-                res.redirect('/')
-            }
-        })
-        console.log("Submiited") 
+        req.checkBody('title','Title is required').notEmpty()
+        req.checkBody('author','Author is required').notEmpty()
+        req.checkBody('body','Descreption is required').notEmpty()
+        //get errors
+        let errors=req.validationErrors()
+        if(errors){
+            res.render('add_article',{
+                title:'Add Article',
+                errors:errors
+            })
+        }
+        else{
+
+            let addedArticle= new Articles()
+            addedArticle.title=req.body.title;
+            addedArticle.author=req.body.author;
+            addedArticle.body=req.body.body
+            addedArticle.save((err)=>{
+                if(err) {
+                    console.log(err)
+                    return;
+                }
+                else{
+                    req.flash('success','Article Added')
+                    res.redirect('/')
+                }
+            })
+            console.log("Submiited") 
+        }
     },
     getArticleDetails(req,res){
         Articles.findById(req.params.id, function(err, article){
@@ -60,6 +75,7 @@ module.exports={
                 return;
             }
             else{
+                req.flash('success','Article Updated')
                 res.redirect('/')
             }
         })
